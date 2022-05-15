@@ -83,7 +83,12 @@ class Snake {
   }
 
   void changeDirection(Direction newDirection) {
-    direction = newDirection;
+    if ((direction == Direction.Up && newDirection != Direction.Down) ||
+        (direction == Direction.Right && newDirection != Direction.Left) ||
+        (direction == Direction.Down && newDirection != Direction.Up) ||
+        (direction == Direction.Left && newDirection != Direction.Right)) {
+      direction = newDirection;
+    }
   }
 
   void addPiece() {
@@ -110,5 +115,16 @@ class Snake {
 
   bool isEating(Food food) {
     return collisionCheck(pieces[0], food, gridSize);
+  }
+
+  bool hitItself() {
+    for (int i = 1; i < pieces.length; i++) {
+      print("Checking piece $i...");
+      if (collisionCheck(pieces[0], pieces[i], gridSize)) {
+        print("hit on piece $i");
+        return true;
+      }
+    }
+    return false;
   }
 }

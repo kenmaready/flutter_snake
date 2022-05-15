@@ -33,6 +33,10 @@ class _GameState extends State<Game> {
       snake.addPiece();
       speed += 1;
     }
+    if (snake.hitItself()) {
+      print("D'oh! Hit myself!");
+      startGame();
+    }
     setState(() {});
   }
 
@@ -48,6 +52,8 @@ class _GameState extends State<Game> {
     width = screenSize.width;
     height = screenSize.height - appBarHeight;
     gridSize = width / 20;
+    score = 0;
+    speed = 1;
     snake = Snake(
         startingX: width / 2,
         startingY: height / 2,
