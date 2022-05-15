@@ -20,10 +20,19 @@ class _GameState extends State<Game> {
   late double width;
   late double height;
   late double gridSize;
+  int speed = 1;
+  int score = 0;
 
   void update() {
     snake.advance();
     print("timer...");
+    if (snake.isEating(food)) {
+      score += 10;
+      food = Food.spawn(
+          screenHeight: height, screenWidth: width, gridSize: gridSize);
+      snake.addPiece();
+      speed += 1;
+    }
     setState(() {});
   }
 
@@ -35,8 +44,9 @@ class _GameState extends State<Game> {
 
   void startGame() {
     final screenSize = MediaQuery.of(context).size;
+    final appBarHeight = AppBar().preferredSize.height;
     width = screenSize.width;
-    height = screenSize.height;
+    height = screenSize.height - appBarHeight;
     gridSize = width / 20;
     snake = Snake(
         startingX: width / 2,
@@ -47,21 +57,23 @@ class _GameState extends State<Game> {
         screenHeight: height);
     food = Food.spawn(
         screenHeight: height, screenWidth: width, gridSize: gridSize);
-    timer =
-        Timer.periodic(const Duration(milliseconds: 200), (timer) => update());
+    timer = Timer.periodic(
+        Duration(milliseconds: 210 - (10 * speed)), (timer) => update());
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Theme.of(context).colorScheme.background,
-        child: snake != null
-            ? Stack(children: [
-                ...snake.draw(),
-                food.draw(),
-                ControlPanel(onPressed: snake.changeDirection)
-              ])
-            : CircularProgressIndicator());
+    return Scaffold(
+        appBar: AppBar(title: Text("Score $score")),
+        body: Container(
+            color: Theme.of(context).colorScheme.background,
+            child: snake != null
+                ? Stack(children: [
+                    ...snake.draw(),
+                    food.draw(),
+                    ControlPanel(onPressed: snake.changeDirection)
+                  ])
+                : CircularProgressIndicator()));
   }
 }

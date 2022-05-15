@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+//
+import './collidable.dart';
 
-class Food {
+class Food implements Collidable {
   final double screenHeight;
   final double screenWidth;
   final double gridSize;

@@ -58,7 +58,9 @@ class ControlPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final height = deviceSize.height;
+    final appBarHeight = AppBar().preferredSize.height;
+    print("AppBar() height: $appBarHeight");
+    final height = deviceSize.height - appBarHeight;
     final width = deviceSize.width;
     final panelCenterX = width / 2;
     final panelCenterY = height * .85;

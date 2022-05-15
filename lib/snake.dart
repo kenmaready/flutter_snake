@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_snake/collision_check.dart';
 //
+import './collidable.dart';
 import './direction.dart';
+import './food.dart';
 
-class SnakePiece {
+class SnakePiece implements Collidable {
   double x;
   double y;
   bool head;
@@ -81,5 +84,31 @@ class Snake {
 
   void changeDirection(Direction newDirection) {
     direction = newDirection;
+  }
+
+  void addPiece() {
+    double newPieceX = pieces.last.x;
+    double newPieceY = pieces.last.y;
+
+    switch (direction) {
+      case Direction.Up:
+        newPieceY += gridSize;
+        break;
+      case Direction.Right:
+        newPieceX -= gridSize;
+        break;
+      case Direction.Down:
+        newPieceY -= gridSize;
+        break;
+      case Direction.Left:
+        newPieceX += gridSize;
+        break;
+    }
+
+    pieces.add(SnakePiece(x: newPieceX, y: newPieceY));
+  }
+
+  bool isEating(Food food) {
+    return collisionCheck(pieces[0], food, gridSize);
   }
 }
