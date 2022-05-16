@@ -16,7 +16,7 @@ class Game extends StatefulWidget {
 class _GameState extends State<Game> {
   late Snake snake;
   late Food food;
-  late Timer timer;
+  Timer timer = Timer(const Duration(milliseconds: 1), () {});
   late double width;
   late double height;
   late double gridSize;
@@ -25,19 +25,26 @@ class _GameState extends State<Game> {
 
   void update() {
     snake.advance();
-    print("timer...");
     if (snake.isEating(food)) {
       score += 10;
       food = Food.spawn(
           screenHeight: height, screenWidth: width, gridSize: gridSize);
       snake.addPiece();
       speed += 1;
+      print("Speed is now $speed");
+      setTimer();
     }
     if (snake.hitItself()) {
       print("D'oh! Hit myself!");
       startGame();
     }
     setState(() {});
+  }
+
+  void setTimer() {
+    timer.cancel();
+    timer = Timer.periodic(
+        Duration(milliseconds: 210 - (10 * speed)), (timer) => update());
   }
 
   @override
@@ -63,9 +70,9 @@ class _GameState extends State<Game> {
         screenHeight: height);
     food = Food.spawn(
         screenHeight: height, screenWidth: width, gridSize: gridSize);
-    timer = Timer.periodic(
-        Duration(milliseconds: 210 - (10 * speed)), (timer) => update());
+    setTimer();
     setState(() {});
+    print("Speed is now $speed");
   }
 
   @override
@@ -80,6 +87,6 @@ class _GameState extends State<Game> {
                     food.draw(),
                     ControlPanel(onPressed: snake.changeDirection)
                   ])
-                : CircularProgressIndicator()));
+                : const CircularProgressIndicator()));
   }
 }

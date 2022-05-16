@@ -17,7 +17,11 @@ class Food implements Collidable {
   }) {
     final _random = new Random();
     this.x = (_random.nextDouble() * screenWidth).round() * 1.0;
-    this.y = (_random.nextDouble() * screenHeight).round() * 1.0;
+    this.y =
+        (_random.nextDouble() * (screenHeight - AppBar().preferredSize.height))
+                .round() *
+            1.0;
+    print("New Food spawning at [$x, $y]...");
   }
 
   Widget draw() {
@@ -26,7 +30,7 @@ class Food implements Collidable {
         width: gridSize,
         left: x - gridSize / 2,
         top: y - gridSize / 2,
-        child: CircleAvatar(
+        child: const CircleAvatar(
           backgroundColor: Colors.yellowAccent,
         ));
   }

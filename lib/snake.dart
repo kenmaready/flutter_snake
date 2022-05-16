@@ -119,9 +119,7 @@ class Snake {
 
   bool hitItself() {
     for (int i = 1; i < pieces.length; i++) {
-      print("Checking piece $i...");
       if (collisionCheck(pieces[0], pieces[i], gridSize)) {
-        print("hit on piece $i");
         return true;
       }
     }
